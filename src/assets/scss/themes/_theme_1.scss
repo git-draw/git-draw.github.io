@@ -1,12 +1,26 @@
+@import "../colors";
+
 $chat_box_background_color: #fff;
 $chat_box_message_background_color: rgba(0, 0, 0, 0.03);
-$chat_box_message_color: #666;
+$chat_box_message_color: $text;
+
+// Chat pop-up color
+$chat_popup_header_background_color: $primary;
+$chat_popup_header_text_color: $white;
+$chat_popup_action_background_color: $primary;
+$chat_popup_action_text_color: $white;
 
 // Chat send button
 $chat_send_button_background_color: rgba(0, 0, 0, 0);
-$chat_send_button_border_color: #fff;
+$chat_send_button_border_color: $white;
 $chat_send_button_text_color: #bbb;
 $chat_input_prefix_color: #bbb;
+
+// Modal
+$modal_header_background_color: $primary;
+$modal_header_text_color: $white;
+$modal_content_background_color: $bg;
+$modal_content_text_color: $text;
 
 
 .chat .chat_converse .chat_msg_item.chat_msg_item_admin {
@@ -25,4 +39,31 @@ button {
 }
 .command-input-prefix {
   color: $chat_input_prefix_color;
+}
+.chat_header {
+  background-color: $chat_popup_header_background_color;
+  color: $chat_popup_header_text_color;
+}
+.fab {
+  background-color: $chat_popup_action_background_color;
+  color: $chat_popup_action_text_color;
+}
+app-modal {
+  font-family: 'ModeSeven', serif;
+
+  .jw-modal {
+    .jw-modal-body {
+      background-color: $modal_content_background_color;
+      color: $modal_content_text_color;
+
+      .modal-header {
+        background-color: $modal_header_background_color;
+        color: $modal_header_text_color;
+      }
+    }
+  }
+
+  .jw-modal-background {
+    background-color: $black;
+  }
 }

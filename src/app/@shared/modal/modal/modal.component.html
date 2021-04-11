@@ -1,0 +1,15 @@
+<div class="jw-modal">
+  <div class="jw-modal-body" appModalBody>
+    <div class="modal-header">
+      <ng-content select="[header]"></ng-content>
+      <div class="modal-close" (click)="close()">&times;</div>
+    </div>
+    <div class="modal-content" appTyping>
+      <ng-content select="[content]"></ng-content>
+    </div>
+    <div class="modal-footer">
+      <ng-content select="[footer]"></ng-content>
+    </div>
+  </div>
+</div>
+<div class="jw-modal-background"></div>
