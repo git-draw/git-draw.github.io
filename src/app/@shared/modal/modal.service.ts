@@ -1,41 +1,45 @@
-import {Injectable, TemplateRef} from '@angular/core';
+import {ApplicationRef, ComponentFactoryResolver, EmbeddedViewRef, Injectable, Injector, TemplateRef} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModalService {
-  private modals: any[] = [];
+  private componentRef: any;
 
-  constructor() {
-  }
-
-  public add(modal: any): void {
-    // add modal to array of active modals
-    this.modals.push(modal);
-  }
-
-  public remove(id: string): void {
-    // remove modal from array of active modals
-    this.modals = this.modals.filter(x => x.id !== id);
-  }
-
-  public open(id: string): void {
-    // open modal specified by id
-    const modal = this.modals.find(x => x.id === id);
-    modal.open();
+  constructor(
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private applicationRef: ApplicationRef,
+    private injector: Injector,
+  ) {
   }
 
   /**
    * Open component
    * @param ref TemplateRef
    */
-  public openComponent(ref: any): void {
+  public open(ref: any): any {
+
     console.log('ref: ', ref.nativeElement);
+
+    const componentRef = this.componentFactoryResolver.resolveComponentFactory(ref).create(this.injector);
+    this.componentRef = componentRef;
+
+    this.applicationRef.attachView(componentRef.hostView);
+
+    const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+    document.body.appendChild(domElem);
+
+    // domElem.style.display = 'block';
+    const a = domElem.getElementsByTagName('app-modal');
+    if (a.length) {
+      (a[0] as HTMLElement).style.display = 'block';
+    }
+    document.body.classList.add('jw-modal-open');
+    return componentRef;
   }
 
-  public close(id: string): void {
-    // close modal specified by id
-    const modal = this.modals.find(x => x.id === id);
-    modal.close();
+  public close(): void {
+    this.applicationRef.detachView(this.componentRef.hostView);
+    this.componentRef.destroy();
   }
 }

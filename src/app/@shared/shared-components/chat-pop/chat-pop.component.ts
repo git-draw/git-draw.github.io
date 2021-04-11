@@ -56,14 +56,6 @@ export class ChatPopComponent implements OnInit {
   }
 
   /**
-   * Close modal
-   * @param id Modal id
-   */
-  public closeModal(id: string): void {
-    this.modalService.close(id);
-  }
-
-  /**
    * Process command
    * @param command Command to process
    * @private
@@ -72,8 +64,7 @@ export class ChatPopComponent implements OnInit {
     switch (command) {
       case 'help':
         console.log('opening modal');
-        // this.modalService.open('custom-modal-2');
-        this.modalService.openComponent(HelpModalComponent);
+        this.modalService.open(HelpModalComponent);
         break;
     }
   }
