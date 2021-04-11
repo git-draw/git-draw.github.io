@@ -39,7 +39,12 @@ export class ChatPopComponent implements OnInit {
   /**
    * Form submit
    */
-  public submit(): void {
-    console.log('data: ', this.form.value);
+  public submit(): void | boolean {
+    if (this.form.invalid) {
+      return false;
+    }
+
+    this.commandHistory.push(this.form.value.command);
+    this.form.reset();
   }
 }
