@@ -7,8 +7,7 @@ ul li{
   position: fixed;
   margin: 1em;
   right: 0;
-  z-index: 998;
-
+  z-index: 99;
 }
 
 .fab {
@@ -17,7 +16,7 @@ ul li{
   height: 56px;
   border-radius: 50%;
   text-align: center;
-  color: #f0f0f0;
+  //color: #f0f0f0;
   margin: 25px auto 0;
   box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
   cursor: pointer;
@@ -26,7 +25,7 @@ ul li{
   position: relative;
   z-index: 998;
   overflow: hidden;
-  background: #42a5f5;
+  //background: #42a5f5;
 
   > i {
     font-size: 2em;
@@ -97,9 +96,7 @@ ul li{
   font-size: 13px;
   font-family: 'ModeSeven', serif;
   font-weight: 500;
-  color: #f3f3f3;
   height: 55px;
-  background: #42a5f5;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   padding-top: 8px;
