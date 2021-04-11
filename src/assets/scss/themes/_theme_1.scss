@@ -1,0 +1,28 @@
+$chat_box_background_color: #fff;
+$chat_box_message_background_color: rgba(0, 0, 0, 0.03);
+$chat_box_message_color: #666;
+
+// Chat send button
+$chat_send_button_background_color: rgba(0, 0, 0, 0);
+$chat_send_button_border_color: #fff;
+$chat_send_button_text_color: #bbb;
+$chat_input_prefix_color: #bbb;
+
+
+.chat .chat_converse .chat_msg_item.chat_msg_item_admin {
+  background: $chat_box_message_background_color;
+  color: $chat_box_message_color;
+}
+button {
+  &.btn-send {
+    background: $chat_send_button_background_color;
+    border-color: $chat_send_button_border_color;
+
+    > i {
+      color: $chat_send_button_text_color;
+    }
+  }
+}
+.command-input-prefix {
+  color: $chat_input_prefix_color;
+}
