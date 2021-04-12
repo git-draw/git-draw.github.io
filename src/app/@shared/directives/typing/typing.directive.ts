@@ -8,6 +8,7 @@ export class TypingDirective implements OnInit, AfterViewInit {
   private innerHTML: any;
   activeI = 0;
   characterLength = 0;
+  isTag = false;
 
   constructor(
     private el: ElementRef
@@ -48,7 +49,6 @@ export class TypingDirective implements OnInit, AfterViewInit {
       return ;
     }
 
-    let isTag = false;
     // console.log(typeof this.innerHTML);
     // console.log(this.innerHTML);
 
@@ -59,9 +59,9 @@ export class TypingDirective implements OnInit, AfterViewInit {
     const char = text.slice(-1);
     // console.log('char: ', char);
 
-    if (char === '<') { isTag = true; }
-    if (char === '>') { isTag = false; }
-    if (isTag) { return this.typing(); }
+    if (char === '<') { this.isTag = true; }
+    if (char === '>') { this.isTag = false; }
+    if (this.isTag) { return this.typing(); }
 
     setTimeout(this.typing.bind(this), 60);
   }

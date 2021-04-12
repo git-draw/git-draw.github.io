@@ -51,9 +51,9 @@ export class ChatPopComponent implements OnInit {
 
     const command = this.form.value.command;
 
-    this.processCommand(command);
-
     this.commandHistory.push(command);
+
+    this.processCommand(command);
     this.form.reset();
   }
 
@@ -67,6 +67,10 @@ export class ChatPopComponent implements OnInit {
       case 'help':
         console.log('opening modal');
         this.modalService.open(HelpModalComponent);
+        break;
+      case 'clear':
+        console.log('clearing command history');
+        this.commandHistory = [];
         break;
     }
   }
