@@ -10,12 +10,17 @@
       </div>
     </div>
 
-    <div class="chat_body chat_login d-none">
-      <a id="chat_first_screen" class="fab"><i class="zmdi zmdi-arrow-right"></i></a>
-      <p>We make it simple and seamless for businesses and people to talk to each other. Ask us anything</p>
+    <div class="chat_body chat_login" appTyping *ngIf="!commandHistory.length">
+      <span>We make it simple and seamless for you to draw git branches and commits by simply running the git commands.</span>
+      <br><br>
+      <span>Use below commands</span>
+      <br>
+      <span>=============</span>
+      <br>
+      <span>$ help</span>
     </div>
 
-    <div id="chat_converse" class="chat_conversion chat_converse">
+    <div id="chat_converse" class="chat_conversion chat_converse" *ngIf="commandHistory.length">
       <div class="chat_msg_item chat_msg_item_admin" *ngFor="let code of commandHistory">
         {{code}}
       </div>

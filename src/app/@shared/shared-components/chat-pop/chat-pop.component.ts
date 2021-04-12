@@ -12,10 +12,12 @@ export class ChatPopComponent implements OnInit {
 
   public toggled = false;
 
-  public commandHistory = [
-    'git checkout master',
-    'git commit -m "hello world"'
-  ];
+  public commandHistory: Array<string> = [];
+
+  // public commandHistory: Array<string> = [
+  //   'git checkout master',
+  //   'git commit -m \'Hello World\''
+  // ];
 
   public activeBranch = 'master';
 
