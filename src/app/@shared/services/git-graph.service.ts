@@ -1,9 +1,13 @@
 import {Injectable} from '@angular/core';
-import { createGitgraph } from '@gitgraph/js';
+import {createGitgraph} from '@gitgraph/js';
 import {HelpModalComponent} from '../shared-components/help-modal/help-modal.component';
 import {ModalService} from '../modal/modal.service';
 import {Subject} from 'rxjs';
 import {Command, CommandFlow, CommandTypes} from '../modes/git-graph.model';
+
+interface Branch {
+  [key: string]: any;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -11,21 +15,27 @@ import {Command, CommandFlow, CommandTypes} from '../modes/git-graph.model';
 export class GitGraphService {
 
   /**
+   * Default branch name.
+   * This branch will be created at the time of initialization.
+   * To override the default branch, pass the default branch name with the initialization method.
+   */
+  defaultBranch = 'master';
+
+  /**
    * Active branch
    */
-  activeBranch = 'master';
+  activeBranch: any;
 
   /**
    * Store git graph object
    * @private
    */
   private gitGraph: any;
-  private a: any;
 
   /**
    * List all branches
    */
-  public branches: Array<string> = ['master'];
+  public branches: Branch = {};
 
   /**
    * Save command history
@@ -45,15 +55,30 @@ export class GitGraphService {
   /**
    * Initialize git graph container
    * @param container HTMLElement
+   * @param defaultBranch Default branch name to use instead of master
    */
-  public initialize(container: HTMLElement): void {
+  public initialize(container: HTMLElement, defaultBranch?: string): void {
     this.gitGraph = createGitgraph(container);
+
+    if (defaultBranch) {
+      this.defaultBranch = defaultBranch;
+    }
+
+    this.addDefaultBranch();
   }
 
-  public commit(message: string): void {
-    this.a = this.gitGraph.branch(this.activeBranch);
-    this.a.commit(message);
+  /**
+   * Add default branch
+   * @private
+   */
+  private addDefaultBranch(): void {
+    this.addNewBranch(this.defaultBranch);
   }
+
+  // public commit(message: string): void {
+  //   this.a = this.gitGraph.branch(this.activeBranch);
+  //   this.a.commit(message);
+  // }
 
   /**
    * Process command
@@ -149,10 +174,26 @@ export class GitGraphService {
           } else {
             return reject('Invalid command');
           }
+        case 'commit':
+          if (splitCommand.length > 2 && splitCommand[2] === '-m') {
+            this.commitMessage(splitCommand[3]);
+            return resolve(``);
+          } else {
+            return reject(`Invalid command: ${command}`);
+          }
         default:
           return reject('Support not added. Please wait');
       }
     });
+  }
+
+  /**
+   * Add commit message
+   * @param message Commit message
+   * @private
+   */
+  private commitMessage(message: string): void {
+    this.activeBranch.commit(message);
   }
 
   /**
@@ -161,8 +202,7 @@ export class GitGraphService {
    * @private
    */
   private addNewBranch(branchName: string): string {
-    this.branches.push(branchName);
-    this.activeBranch = branchName;
+    this.branches[branchName] = this.gitGraph.branch(branchName);
 
     return this.switchBranch(branchName);
   }
@@ -173,7 +213,7 @@ export class GitGraphService {
    * @private
    */
   private switchBranch(branchName: string): string {
-    this.activeBranch = branchName;
+    this.activeBranch = this.branches[branchName];
     return this.activeBranch;
   }
 
