@@ -16,16 +16,16 @@ export class GitGraphService {
   activeBranch = 'master';
 
   /**
-   * List of all checkout branches
-   */
-  allBranches = ['master'];
-
-  /**
    * Store git graph object
    * @private
    */
   private gitGraph: any;
   private a: any;
+
+  /**
+   * List all branches
+   */
+  public branches: Array<string> = ['master'];
 
   /**
    * Save command history
@@ -77,12 +77,16 @@ export class GitGraphService {
           this.addDeveloperInfo();
           return resolve('');
         default:
-          if (command.startsWith('who are you') || command.toLowerCase() === 'who') {
-            this.updateCommandHistory(
-              'output',
-              `Glad to know, you want to know about me. I'm Git-Draw developed by Anuj Sharma.To know more, type <b><i>developer</i></b>`,
-              'info'
-            );
+          if (command.startsWith('git')) {
+            this.processGitCommand(command).then(res => {
+              this.updateCommandHistory('output', res, 'success');
+              return resolve(res);
+            }).catch(err => {
+              this.updateCommandHistory('output', err, 'error');
+              return reject(err);
+            });
+          } else if (command.startsWith('who are you') || command.toLowerCase() === 'who') {
+            this.addWhoInfo();
             return resolve('');
           } else {
             this.updateCommandHistory('output', 'Invalid command', 'error');
@@ -102,6 +106,75 @@ export class GitGraphService {
       `Website: <a href="https://anujs.in" target="_blank">www.anujs.in</a>`;
 
     this.updateCommandHistory('output', info, 'info');
+  }
+
+  /**
+   * Add who info
+   * @private
+   */
+  private addWhoInfo(): void {
+    const info = `Glad to know, you want to know about me. I'm Git-Draw developed by Anuj Sharma.` +
+      `To know more, type <b><i>developer</i></b>`;
+    this.updateCommandHistory('output', info, 'info');
+  }
+
+  /**
+   * Process git command
+   * @param command Command
+   * @private
+   */
+  private processGitCommand(command: string): Promise<string> {
+    const splitCommand = command.split(' ');
+    console.log('splitCommand: ', splitCommand);
+
+    return new Promise((resolve, reject) => {
+      if (!splitCommand.length) {
+        return reject('Empty command');
+      }
+
+      if (splitCommand[0] !== 'git') {
+        return reject(`Invalid command: ${splitCommand[0]}`);
+      }
+
+      switch (splitCommand[1]) {
+        case 'checkout':
+          if (splitCommand.length > 2) {
+            if (splitCommand[2] === '-b') {
+              this.addNewBranch(splitCommand[3]);
+              return resolve(`Switched to a new branch '${splitCommand[3]}'`);
+            } else {
+              this.switchBranch(splitCommand[2]);
+              return resolve(`Switched to branch '${splitCommand[2]}`);
+            }
+          } else {
+            return reject('Invalid command');
+          }
+        default:
+          return reject('Support not added. Please wait');
+      }
+    });
+  }
+
+  /**
+   * Add new branch to the list
+   * @param branchName Branch name to add
+   * @private
+   */
+  private addNewBranch(branchName: string): string {
+    this.branches.push(branchName);
+    this.activeBranch = branchName;
+
+    return this.switchBranch(branchName);
+  }
+
+  /**
+   * Switch to branch
+   * @param branchName Branch name to switch
+   * @private
+   */
+  private switchBranch(branchName: string): string {
+    this.activeBranch = branchName;
+    return this.activeBranch;
   }
 
   /**
