@@ -1,3 +1,7 @@
 <div id="git-graph"></div>
 
-<app-chat-pop [history]="history" (commandOutput)="onCommandOutput($event)"></app-chat-pop>
+<app-chat-pop
+  [history]="history"
+  [activeBranch]="activeBranch"
+  (commandOutput)="onCommandOutput($event)">
+</app-chat-pop>

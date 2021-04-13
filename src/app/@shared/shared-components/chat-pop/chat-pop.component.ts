@@ -1,7 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ModalService} from '../../modal/modal.service';
-import {HelpModalComponent} from '../help-modal/help-modal.component';
 import {Command} from '../../modes/git-graph.model';
 
 @Component({
@@ -11,14 +9,29 @@ import {Command} from '../../modes/git-graph.model';
 })
 export class ChatPopComponent implements OnInit {
 
+  /**
+   * Input active branch
+   */
+  @Input() activeBranch = 'master';
+
+  /**
+   * Input command history
+   */
   @Input() history: Array<Command> = [];
 
+  /**
+   * Output when user enters a command
+   */
   @Output() commandOutput: EventEmitter<string> = new EventEmitter<string>();
 
+  /**
+   * Save CLI toggle status
+   */
   public toggled = false;
 
-  public activeBranch = 'master';
-
+  /**
+   * Form group
+   */
   public form: FormGroup;
 
   constructor(
@@ -37,6 +50,9 @@ export class ChatPopComponent implements OnInit {
     }
   }
 
+  /**
+   * Toggle CLI panel
+   */
   public toggle(): void {
     this.toggled = !this.toggled;
   }
@@ -51,28 +67,7 @@ export class ChatPopComponent implements OnInit {
 
     const command = this.form.value.command;
 
-    // this.history.push(command);
-
-    // this.processCommand(command);
     this.commandOutput.emit(command);
     this.form.reset();
   }
-
-  // /**
-  //  * Process command
-  //  * @param command Command to process
-  //  * @private
-  //  */
-  // private processCommand(command: string): void {
-  //   switch (command) {
-  //     case 'help':
-  //       console.log('opening modal');
-  //       this.modalService.open(HelpModalComponent);
-  //       break;
-  //     case 'clear':
-  //       console.log('clearing command history');
-  //       this.commandHistory = [];
-  //       break;
-  //   }
-  // }
 }

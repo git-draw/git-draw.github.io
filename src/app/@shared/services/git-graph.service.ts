@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {createGitgraph} from '@gitgraph/js';
+import {GitgraphOptions} from '@gitgraph/core';
 import {HelpModalComponent} from '../shared-components/help-modal/help-modal.component';
 import {ModalService} from '../modal/modal.service';
 import {Subject} from 'rxjs';
@@ -19,12 +20,12 @@ export class GitGraphService {
    * This branch will be created at the time of initialization.
    * To override the default branch, pass the default branch name with the initialization method.
    */
-  defaultBranch = 'master';
+  private defaultBranch = 'master';
 
   /**
    * Active branch
    */
-  activeBranch: any;
+  private activeBranch: any;
 
   /**
    * Store git graph object
@@ -35,7 +36,7 @@ export class GitGraphService {
   /**
    * List all branches
    */
-  public branches: Branch = {};
+  private branches: Branch = {};
 
   /**
    * Save command history
@@ -47,6 +48,11 @@ export class GitGraphService {
    */
   public commandHistoryChange: Subject<Array<Command>> = new Subject<Array<Command>>();
 
+  /**
+   * Emit subject on branch change
+   */
+  public branchChange: Subject<string> = new Subject<string>();
+
   constructor(
     private modalService: ModalService
   ) {
@@ -55,10 +61,11 @@ export class GitGraphService {
   /**
    * Initialize git graph container
    * @param container HTMLElement
+   * @param options Options for gitGraph
    * @param defaultBranch Default branch name to use instead of master
    */
-  public initialize(container: HTMLElement, defaultBranch?: string): void {
-    this.gitGraph = createGitgraph(container);
+  public initialize(container: HTMLElement, options?: GitgraphOptions, defaultBranch?: string): void {
+    this.gitGraph = createGitgraph(container, options);
 
     if (defaultBranch) {
       this.defaultBranch = defaultBranch;
@@ -72,7 +79,7 @@ export class GitGraphService {
    * @private
    */
   private addDefaultBranch(): void {
-    this.addNewBranch(this.defaultBranch);
+    this.addNewBranch(this.defaultBranch).then();
   }
 
   // public commit(message: string): void {
@@ -85,6 +92,9 @@ export class GitGraphService {
    * @param command Command from user
    */
   public processCommand(command: string): Promise<boolean|string> {
+    // Trim white spaces
+    command = command.trim();
+
     this.updateCommandHistory('input', command);
 
     return new Promise((resolve, reject) => {
@@ -165,18 +175,25 @@ export class GitGraphService {
         case 'checkout':
           if (splitCommand.length > 2) {
             if (splitCommand[2] === '-b') {
-              this.addNewBranch(splitCommand[3]);
-              return resolve(`Switched to a new branch '${splitCommand[3]}'`);
+              this.addNewBranch(splitCommand[3]).then(() => {
+                return resolve(`Switched to a new branch '${splitCommand[3]}'`);
+              }).catch(err => {
+                return reject(err);
+              });
             } else {
-              this.switchBranch(splitCommand[2]);
-              return resolve(`Switched to branch '${splitCommand[2]}`);
+              this.switchBranch(splitCommand[2]).then(() => {
+                return resolve(`Switched to branch '${splitCommand[2]}`);
+              }).catch(err => {
+                return reject(err);
+              });
             }
           } else {
             return reject('Invalid command');
           }
+          break;
         case 'commit':
           if (splitCommand.length > 2 && splitCommand[2] === '-m') {
-            this.commitMessage(splitCommand[3]);
+            this.commitMessage(splitCommand.slice(3).join(' '));
             return resolve(``);
           } else {
             return reject(`Invalid command: ${command}`);
@@ -193,6 +210,12 @@ export class GitGraphService {
    * @private
    */
   private commitMessage(message: string): void {
+    // Remove double quotes
+    message.replace(/(^")|("$)/g, '');
+    // Remove single quotes
+    message.replace(/(^')|('$)/g, '');
+
+    // Add commit message
     this.activeBranch.commit(message);
   }
 
@@ -201,10 +224,19 @@ export class GitGraphService {
    * @param branchName Branch name to add
    * @private
    */
-  private addNewBranch(branchName: string): string {
-    this.branches[branchName] = this.gitGraph.branch(branchName);
+  private addNewBranch(branchName: string): Promise<string> {
+    return new Promise(async (resolve, reject) => {
+      if (Object.keys(this.branches).includes(branchName)) {
+        return reject(`fatal: A branch named '${branchName}' already exists`);
+      }
 
-    return this.switchBranch(branchName);
+      this.branches[branchName] = this.gitGraph.branch(branchName);
+
+      // Switch branch
+      await this.switchBranch(branchName);
+
+      return resolve(branchName);
+    });
   }
 
   /**
@@ -212,9 +244,20 @@ export class GitGraphService {
    * @param branchName Branch name to switch
    * @private
    */
-  private switchBranch(branchName: string): string {
-    this.activeBranch = this.branches[branchName];
-    return this.activeBranch;
+  private switchBranch(branchName: string): Promise<string> {
+
+    return new Promise((resolve, reject) => {
+      if (!Object.keys(this.branches).includes(branchName)) {
+        return reject('Branch does not exists. Use -b to create new branch');
+      }
+
+      this.activeBranch = this.branches[branchName];
+
+      // Emit branch name as branch change
+      this.branchChange.next(branchName);
+
+      return resolve(this.activeBranch);
+    });
   }
 
   /**
