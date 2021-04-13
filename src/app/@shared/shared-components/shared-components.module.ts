@@ -15,15 +15,15 @@ import { HelpModalComponent } from './help-modal/help-modal.component';
     ChatBubbleComponent,
     HelpModalComponent
   ],
-  exports: [
-    ChatPopComponent,
-    ChatBubbleComponent
-  ],
+    exports: [
+        ChatPopComponent,
+        ChatBubbleComponent
+    ],
   imports: [
     CommonModule,
-    ReactiveFormsModule,
     ModalModule,
-    DirectivesModule
+    DirectivesModule,
+    ReactiveFormsModule
   ]
 })
 export class SharedComponentsModule { }
