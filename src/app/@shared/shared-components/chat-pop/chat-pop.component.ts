@@ -17,20 +17,12 @@ export class ChatPopComponent implements OnInit {
 
   public toggled = false;
 
-  public commandHistory: Array<string> = [];
-
-  // public commandHistory: Array<string> = [
-  //   'git checkout master',
-  //   'git commit -m \'Hello World\''
-  // ];
-
   public activeBranch = 'master';
 
   public form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
-    private modalService: ModalService
   ) {
     this.form = this.fb.group({
       command: ['', [
@@ -66,21 +58,21 @@ export class ChatPopComponent implements OnInit {
     this.form.reset();
   }
 
-  /**
-   * Process command
-   * @param command Command to process
-   * @private
-   */
-  private processCommand(command: string): void {
-    switch (command) {
-      case 'help':
-        console.log('opening modal');
-        this.modalService.open(HelpModalComponent);
-        break;
-      case 'clear':
-        console.log('clearing command history');
-        this.commandHistory = [];
-        break;
-    }
-  }
+  // /**
+  //  * Process command
+  //  * @param command Command to process
+  //  * @private
+  //  */
+  // private processCommand(command: string): void {
+  //   switch (command) {
+  //     case 'help':
+  //       console.log('opening modal');
+  //       this.modalService.open(HelpModalComponent);
+  //       break;
+  //     case 'clear':
+  //       console.log('clearing command history');
+  //       this.commandHistory = [];
+  //       break;
+  //   }
+  // }
 }

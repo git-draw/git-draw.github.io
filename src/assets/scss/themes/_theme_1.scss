@@ -26,6 +26,21 @@ $modal_content_text_color: $text;
 .chat .chat_converse .chat_msg_item.chat_msg_item_admin {
   background: $chat_box_message_background_color;
   color: $chat_box_message_color;
+
+  &.output {
+    &.error {
+      color: $danger;
+    }
+    &.warning {
+      color: $warning;
+    }
+    &.success {
+      color: $success;
+    }
+    &.info {
+      color: $info;
+    }
+  }
 }
 button {
   &.btn-send {

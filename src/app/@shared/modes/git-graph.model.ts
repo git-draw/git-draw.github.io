@@ -1,4 +1,8 @@
+export type CommandTypes = 'error'|'warning'|'success'|'info';
+export type CommandFlow = 'input'|'output';
+
 export interface Command {
-  type: 'input' | 'output';
+  flow: CommandFlow;
+  type?: CommandTypes;
   command: string;
 }

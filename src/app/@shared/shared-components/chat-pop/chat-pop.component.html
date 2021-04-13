@@ -21,8 +21,14 @@
     </div>
 
     <div id="chat_converse" class="chat_conversion chat_converse" *ngIf="history.length">
-      <div class="chat_msg_item chat_msg_item_admin" [class.output]="code.type === 'output'" *ngFor="let code of history">
-        {{code.command}}
+      <div class="chat_msg_item chat_msg_item_admin"
+           [class.output]="code.flow === 'output'"
+           [class.error]="code.type === 'error'"
+           [class.warning]="code.type === 'warning'"
+           [class.success]="code.type === 'success'"
+           [class.info]="code.type === 'info'"
+           [innerHTML]="code.command"
+           *ngFor="let code of history">
       </div>
     </div>
 
