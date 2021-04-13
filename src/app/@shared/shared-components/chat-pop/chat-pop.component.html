@@ -10,7 +10,7 @@
       </div>
     </div>
 
-    <div class="chat_body chat_login" appTyping *ngIf="!commandHistory.length">
+    <div class="chat_body chat_login" appTyping *ngIf="!history.length">
       <span>We make it simple and seamless for you to draw git branches and commits by simply running the git commands.</span>
       <br><br>
       <span>Use below commands</span>
@@ -20,9 +20,9 @@
       <span>$ help</span>
     </div>
 
-    <div id="chat_converse" class="chat_conversion chat_converse" *ngIf="commandHistory.length">
-      <div class="chat_msg_item chat_msg_item_admin" *ngFor="let code of commandHistory">
-        {{code}}
+    <div id="chat_converse" class="chat_conversion chat_converse" *ngIf="history.length">
+      <div class="chat_msg_item chat_msg_item_admin" [class.output]="code.type === 'output'" *ngFor="let code of history">
+        {{code.command}}
       </div>
     </div>
 

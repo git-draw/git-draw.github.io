@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ModalService} from '../../modal/modal.service';
 import {HelpModalComponent} from '../help-modal/help-modal.component';
+import {Command} from '../../modes/git-graph.model';
 
 @Component({
   selector: 'app-chat-pop',
@@ -9,6 +10,10 @@ import {HelpModalComponent} from '../help-modal/help-modal.component';
   styleUrls: ['./chat-pop.component.scss']
 })
 export class ChatPopComponent implements OnInit {
+
+  @Input() history: Array<Command> = [];
+
+  @Output() commandOutput: EventEmitter<string> = new EventEmitter<string>();
 
   public toggled = false;
 
@@ -35,6 +40,9 @@ export class ChatPopComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.history.length) {
+      this.toggle();
+    }
   }
 
   public toggle(): void {
@@ -51,9 +59,10 @@ export class ChatPopComponent implements OnInit {
 
     const command = this.form.value.command;
 
-    this.commandHistory.push(command);
+    // this.history.push(command);
 
-    this.processCommand(command);
+    // this.processCommand(command);
+    this.commandOutput.emit(command);
     this.form.reset();
   }
 
