@@ -198,10 +198,53 @@ export class GitGraphService {
           } else {
             return reject(`Invalid command: ${command}`);
           }
+        case 'tag':
+          // git tag -a 1.0 -m message
+          if (splitCommand.length > 2 && splitCommand[2] === '-a') {
+            const tag = splitCommand[3];
+            this.addTag(tag);
+            return resolve('');
+          }
+          return reject('');
+        case 'merge':
+          // git merge branch -m 'msg'
+          if (splitCommand.length > 2) {
+            const branch = splitCommand[2];
+            let msg = null;
+            if (splitCommand.length > 4 && splitCommand[3] === '-m') {
+              msg = splitCommand.slice(3).join(' ');
+            }
+            this.merge(branch, msg);
+            return resolve('');
+          }
+          return reject('');
         default:
           return reject('Support not added. Please wait');
       }
     });
+  }
+
+  /**
+   * Merge branch
+   * @param branch Branch to merge
+   * @param message Merge message
+   * @private
+   */
+  private merge(branch: string, message?: string|null): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (!Object.keys(this.branches).includes(branch)) {
+        return reject(`Branch not found ${branch}`);
+      }
+
+      message = message ? message : '';
+
+      this.activeBranch.merge(branch, message);
+      return resolve(`'${branch}' merged to '${this.activeBranch}' branch`);
+    });
+  }
+
+  private addTag(tag: string): void {
+    this.activeBranch.tag(tag);
   }
 
   /**
