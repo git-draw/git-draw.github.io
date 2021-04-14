@@ -203,9 +203,10 @@ export class GitGraphService {
           if (splitCommand.length > 2 && splitCommand[2] === '-a') {
             const tag = splitCommand[3];
             this.addTag(tag);
-            return resolve('');
+            return resolve(`Commit tagged ${tag}`);
+          } else {
+            return reject('Invalid command');
           }
-          return reject('Invalid command');
         case 'merge':
           // git merge branch -m 'msg'
           if (splitCommand.length > 2) {
@@ -219,10 +220,12 @@ export class GitGraphService {
             }).catch(err => {
               return reject(err);
             });
+          } else {
+            return reject('Invalid command');
           }
-          return reject('Invalid command');
+          break;
         default:
-          return reject('Support not added. Please wait');
+          return reject('Support not added. Please report to hello@anujs.in');
       }
     });
   }
@@ -242,7 +245,8 @@ export class GitGraphService {
       message = message ? message : '';
 
       this.activeBranch.merge(branch, message);
-      return resolve(`'${branch}' merged to '${this.activeBranch}' branch`);
+      const activeBranchKey = Object.keys(this.branches).find(k => this.branches[k] === this.activeBranch);
+      return resolve(`'${branch}' merged to '${activeBranchKey}' branch`);
     });
   }
 
