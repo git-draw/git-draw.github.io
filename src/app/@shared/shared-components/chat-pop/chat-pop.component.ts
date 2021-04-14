@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {Command} from '../../modes/git-graph.model';
+import {Command} from '../../models/git-graph.model';
 
 @Component({
   selector: 'app-chat-pop',

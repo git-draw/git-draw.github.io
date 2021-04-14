@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {GitgraphOptions} from '@gitgraph/core';
 import {GitGraphService} from '../../../@shared/services/git-graph.service';
-import {Command} from '../../../@shared/modes/git-graph.model';
+import {Command} from '../../../@shared/models/git-graph.model';
 
 @Component({
   selector: 'app-graph-container',
