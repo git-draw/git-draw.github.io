@@ -155,4 +155,16 @@ export class GraphContainerComponent implements OnInit, AfterViewInit, OnDestroy
       this.panZoomApiSubscribe.unsubscribe();
     }
   }
+
+  /**
+   * Zoom pan
+   * @param zoomIn When set to false, will work as zoom out
+   */
+  zoom(zoomIn = true): void {
+    if (zoomIn) {
+      this.panZoomApi.zoomIn();
+    } else {
+      this.panZoomApi.zoomOut();
+    }
+  }
 }

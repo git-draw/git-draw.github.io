@@ -9,6 +9,12 @@
 </div>
 
 <div class="graph-actions">
+  <button aria-label="Zoom out" class="btn-blank" (click)="zoom(false)">
+    <i class="zmdi zmdi-minus-circle-outline"></i>
+  </button>
+  <button aria-label="Zoom in" class="btn-blank" (click)="zoom(true)">
+    <i class="zmdi zmdi-plus-circle-o"></i>
+  </button>
   <button aria-label="Center content" class="btn-blank" (click)="centerContent()">
     <i class="zmdi zmdi-center-focus-weak"></i>
   </button>
