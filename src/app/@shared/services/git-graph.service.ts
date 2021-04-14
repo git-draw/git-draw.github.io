@@ -243,6 +243,11 @@ export class GitGraphService {
     });
   }
 
+  /**
+   * Add tag
+   * @param tag Tag
+   * @private
+   */
   private addTag(tag: string): void {
     this.activeBranch.tag(tag);
   }
