@@ -4,7 +4,7 @@ import {GitgraphOptions} from '@gitgraph/core';
 import {HelpModalComponent} from '../shared-components/help-modal/help-modal.component';
 import {ModalService} from '../modal/modal.service';
 import {Subject} from 'rxjs';
-import {Command, CommandFlow, CommandTypes} from '../modes/git-graph.model';
+import {Command, CommandFlow, CommandTypes} from '../models/git-graph.model';
 
 interface Branch {
   [key: string]: any;
@@ -205,7 +205,7 @@ export class GitGraphService {
             this.addTag(tag);
             return resolve('');
           }
-          return reject('');
+          return reject('Invalid command');
         case 'merge':
           // git merge branch -m 'msg'
           if (splitCommand.length > 2) {
@@ -214,10 +214,13 @@ export class GitGraphService {
             if (splitCommand.length > 4 && splitCommand[3] === '-m') {
               msg = splitCommand.slice(3).join(' ');
             }
-            this.merge(branch, msg);
-            return resolve('');
+            this.merge(branch, msg).then(res => {
+              return resolve(res);
+            }).catch(err => {
+              return reject(err);
+            });
           }
-          return reject('');
+          return reject('Invalid command');
         default:
           return reject('Support not added. Please wait');
       }
@@ -233,7 +236,7 @@ export class GitGraphService {
   private merge(branch: string, message?: string|null): Promise<string> {
     return new Promise((resolve, reject) => {
       if (!Object.keys(this.branches).includes(branch)) {
-        return reject(`Branch not found ${branch}`);
+        return reject(`merge: ${branch} - not something we can merge`);
       }
 
       message = message ? message : '';
@@ -243,6 +246,11 @@ export class GitGraphService {
     });
   }
 
+  /**
+   * Add tag
+   * @param tag Tag
+   * @private
+   */
   private addTag(tag: string): void {
     this.activeBranch.tag(tag);
   }
