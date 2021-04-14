@@ -2,6 +2,9 @@
 <div class="pan-container" id="pan-container">
   <pan-zoom [config]="panZoomConfig">
     <div id="git-graph"></div>
+    <div class="help-content" *ngIf="!history.length">
+      <app-help-content></app-help-content>
+    </div>
   </pan-zoom>
 </div>
 

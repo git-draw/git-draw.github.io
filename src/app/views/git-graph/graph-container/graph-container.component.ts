@@ -70,20 +70,15 @@ export class GraphContainerComponent implements OnInit, AfterViewInit, OnDestroy
     this.panZoomApiSubscribe = this.panZoomConfig.api.subscribe((api: PanZoomAPI) => this.panZoomApi = api);
   }
 
+  ngOnInit(): void {
+    const container = document.getElementById('git-graph') as HTMLElement;
+    this.gitGraphService.initialize(container, this.gitGraphOptions);
+  }
+
   /**
    * Subscribe after view init
    */
   ngAfterViewInit(): void {
-    // set html to canvas
-    html2canvas(document.getElementById('pan-container') as HTMLElement).then(canvas => {
-      console.log('canvas: ', canvas);
-    });
-  }
-
-  ngOnInit(): void {
-    const container = document.getElementById('git-graph') as HTMLElement;
-    this.gitGraphService.initialize(container, this.gitGraphOptions);
-
     // Center pan zoom content
     this.centerContent();
   }

@@ -6,6 +6,7 @@ import { ChatBubbleComponent } from './chat-bubble/chat-bubble.component';
 import {ModalModule} from '../modal/modal.module';
 import {DirectivesModule} from '../directives/directives.module';
 import { HelpModalComponent } from './help-modal/help-modal.component';
+import { HelpContentComponent } from './help-content/help-content.component';
 
 
 
@@ -13,12 +14,15 @@ import { HelpModalComponent } from './help-modal/help-modal.component';
   declarations: [
     ChatPopComponent,
     ChatBubbleComponent,
-    HelpModalComponent
+    HelpModalComponent,
+    HelpContentComponent
   ],
-    exports: [
-        ChatPopComponent,
-        ChatBubbleComponent
-    ],
+  exports: [
+    ChatPopComponent,
+    ChatBubbleComponent,
+    HelpModalComponent,
+    HelpContentComponent
+  ],
   imports: [
     CommonModule,
     ModalModule,

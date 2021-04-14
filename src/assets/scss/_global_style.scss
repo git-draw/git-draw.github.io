@@ -68,3 +68,14 @@ body {
     background: #e2e2e2bf;
   }
 }
+.help-content {
+  font-family: 'ModeSeven', serif;
+  color: gray;
+}
+.help-list {
+  padding-left: 1rem;
+
+  li {
+    list-style: circle;
+  }
+}
