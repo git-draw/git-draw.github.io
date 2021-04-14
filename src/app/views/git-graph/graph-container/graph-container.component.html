@@ -1,4 +1,22 @@
-<div id="git-graph"></div>
+
+<div class="pan-container" id="pan-container">
+  <pan-zoom [config]="panZoomConfig">
+    <div id="git-graph"></div>
+  </pan-zoom>
+</div>
+
+<div class="graph-actions">
+  <button aria-label="Center content" class="btn-blank" (click)="centerContent()">
+    <i class="zmdi zmdi-center-focus-weak"></i>
+  </button>
+  <button aria-label="Full screen" class="btn-blank" (click)="fullScreen()">
+    <i class="zmdi zmdi-fullscreen-alt" *ngIf="!isFullScreen"></i>
+    <i class="zmdi zmdi-fullscreen-exit" *ngIf="isFullScreen"></i>
+  </button>
+  <button aria-label="Save image" class='c-interaction__button' (click)="captureImage()">
+    <i class="zmdi zmdi-camera"></i>
+  </button>
+</div>
 
 <app-chat-pop
   [history]="history"

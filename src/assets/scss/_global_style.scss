@@ -36,3 +36,35 @@ body {
     visibility: hidden;
   }
 }
+
+.pan-container {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  cursor: grab;
+}
+.graph-actions {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+
+  .c-interaction__button {
+    color: white;
+    font-size: 1.5rem;
+  }
+}
+.btn-blank {
+  padding: 0.5rem;
+  background: transparent;
+  border: 0;
+  font-size: 1.5rem;
+  margin: auto 6px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover {
+    background: #e2e2e2bf;
+  }
+}

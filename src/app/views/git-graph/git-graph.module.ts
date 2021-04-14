@@ -4,14 +4,16 @@ import {GraphContainerComponent} from './graph-container/graph-container.compone
 import {GitGraphRouting} from './git-graph.routing';
 import {ReactiveFormsModule} from '@angular/forms';
 import {SharedComponentsModule} from '../../@shared/shared-components/shared-components.module';
+import {NgxPanZoomModule} from 'ngx-panzoom';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    GitGraphRouting,
-    ReactiveFormsModule,
-    SharedComponentsModule
-  ],
+    imports: [
+        CommonModule,
+        GitGraphRouting,
+        ReactiveFormsModule,
+        SharedComponentsModule,
+        NgxPanZoomModule
+    ],
   declarations: [
     GraphContainerComponent
   ]
